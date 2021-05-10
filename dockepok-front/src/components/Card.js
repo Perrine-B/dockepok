@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PokeCard(props) {
   const { pokemon } = props;
-  console.log(pokemon);
 
   const classes = useStyles();
 

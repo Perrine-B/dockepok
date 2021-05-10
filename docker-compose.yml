@@ -1,0 +1,40 @@
+version: "3"
+#Les différents services
+services: 
+    db: 
+        container_name: dockepok_db
+        image: mysql:latest
+        volumes:
+            - ./db_data:/var/lib/mysql
+            - ./dockepok-back/sql:/docker-entrypoint-initdb.d
+        ports:
+            - "3306:3306"
+        restart: always
+        environment: 
+            MYSQL_ROOT_PASSWORD: pizza
+            MYSQL_DATABASE: docker_pokemon
+            MYSQL_USER: cesidocker
+            MYSQL_PASSWORD: isec
+
+    api: 
+        container_name: dockepok_api
+        build: ./dockepok-back
+        depends_on: 
+            - db
+        ports: ["3001:3001"]
+        restart: always
+        environment:
+            DB_HOST: dockepok_db
+            DB_USER: cesidocker
+            DB_PASSWORD: isec
+            DB_NAME: docker_pokemon
+
+    front: 
+        container_name: dockepok_react
+        build: ./dockepok-front
+        depends_on: 
+            - api
+            - db
+        ports: ["3000:3000"]
+        restart: "always"
+        
